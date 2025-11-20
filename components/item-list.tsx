@@ -61,36 +61,33 @@ export function ItemList({ items, onItemDeleted }: { items: Item[]; onItemDelete
         const isExpired = daysUntilExpiry < 0
         const isExpiringSoon = daysUntilExpiry <= 3 && daysUntilExpiry >= 0
 
-        const borderColor = isExpired ? "border-l-red-500" : isExpiringSoon ? "border-l-yellow-500" : "border-l-green-500"
-        const bgGradient = isExpired ? "from-red-500/10 to-red-600/5" : isExpiringSoon ? "from-yellow-500/10 to-yellow-600/5" : "from-green-500/10 to-green-600/5"
+        const bgColor = isExpired ? "bg-red-50" : isExpiringSoon ? "bg-amber-50" : "bg-emerald-50"
+        const borderColor = isExpired ? "border-red-200" : isExpiringSoon ? "border-amber-200" : "border-emerald-200"
+        const statusBgColor = isExpired ? "bg-red-100 text-red-800" : isExpiringSoon ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"
 
         return (
-          <Card key={item.id} className={`p-6 hover:shadow-xl transition-all border-l-4 ${borderColor} bg-gradient-to-br ${bgGradient} backdrop-blur-sm border border-slate-700/50`}>
+          <Card key={item.id} className={`p-6 hover:shadow-lg transition-all border-l-4 ${isExpired ? "border-l-red-500" : isExpiringSoon ? "border-l-amber-500" : "border-l-emerald-500"} ${bgColor} border ${borderColor}`}>
             <div className="mb-4">
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold text-white">{item.name}</h3>
-                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-500/20 text-green-300 border border-green-500/50">{item.category}</span>
+                <h3 className="text-lg font-bold text-gray-900">{item.name}</h3>
+                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-700">{item.category}</span>
               </div>
-              <p className={`inline-block px-3 py-1 rounded-full text-sm font-semibold border ${isExpired ? "bg-red-500/20 text-red-200 border-red-500/50" : isExpiringSoon ? "bg-yellow-500/20 text-yellow-200 border-yellow-500/50" : "bg-green-500/20 text-green-200 border-green-500/50"}`}>
+              <p className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${statusBgColor}`}>
                 {getStatusText(item.expiry_date)}
               </p>
             </div>
 
             <div className="space-y-3 mb-6 text-sm">
-              <div className="flex items-center gap-2 text-green-100/80">
-                <Package size={16} className="text-green-400" />
+              <div className="flex items-center gap-2 text-gray-700">
+                <Package size={16} className="text-gray-500" />
                 <span><strong>Quantity:</strong> {item.quantity} {item.unit}</span>
               </div>
-              <div className="flex items-center gap-2 text-green-100/80">
-                <MapPin size={16} className="text-green-400" />
+              <div className="flex items-center gap-2 text-gray-700">
+                <MapPin size={16} className="text-gray-500" />
                 <span><strong>Location:</strong> {item.location}</span>
               </div>
-              <div className="flex items-center gap-2 text-green-100/80">
-                <Calendar size={16} className="text-green-400" />
-                <span><strong>Purchased:</strong> {format(new Date(item.purchase_date), "MMM d, yyyy")}</span>
-              </div>
-              <div className="flex items-center gap-2 text-green-100/80">
-                <Calendar size={16} className="text-green-400" />
+              <div className="flex items-center gap-2 text-gray-700">
+                <Calendar size={16} className="text-gray-500" />
                 <span><strong>Expires:</strong> {format(new Date(item.expiry_date), "MMM d, yyyy")}</span>
               </div>
             </div>
@@ -100,12 +97,12 @@ export function ItemList({ items, onItemDeleted }: { items: Item[]; onItemDelete
                 await deleteItem(item.id)
                 onItemDeleted()
               }}
-              variant="destructive"
+              variant="outline"
               size="sm"
-              className="w-full gap-2 bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/50"
+              className="w-full gap-2 border-red-300 text-red-700 hover:bg-red-50"
             >
               <Trash2 size={16} />
-              Delete Item
+              Delete
             </Button>
           </Card>
         )

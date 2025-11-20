@@ -40,41 +40,41 @@ export function StatsCard() {
       icon: Package,
       label: "Total Items",
       value: stats.total_items,
-      bgGradient: "from-blue-500/20 to-blue-600/10",
-      borderColor: "border-blue-400/30",
-      textColor: "text-blue-300",
-      accentColor: "text-blue-100",
-      iconColor: "text-blue-400",
+      bgGradient: "from-blue-50 to-blue-100",
+      borderColor: "border-blue-200",
+      textColor: "text-blue-600",
+      accentColor: "text-blue-900",
+      iconColor: "text-blue-500",
     },
     {
       icon: CheckCircle,
       label: "Fresh",
       value: stats.fresh_items,
-      bgGradient: "from-green-500/20 to-green-600/10",
-      borderColor: "border-green-400/30",
-      textColor: "text-green-300",
-      accentColor: "text-green-100",
-      iconColor: "text-green-400",
+      bgGradient: "from-emerald-50 to-emerald-100",
+      borderColor: "border-emerald-200",
+      textColor: "text-emerald-600",
+      accentColor: "text-emerald-900",
+      iconColor: "text-emerald-500",
     },
     {
       icon: AlertCircle,
       label: "Expiring Soon",
       value: stats.expiring_soon,
-      bgGradient: "from-yellow-500/20 to-yellow-600/10",
-      borderColor: "border-yellow-400/30",
-      textColor: "text-yellow-300",
-      accentColor: "text-yellow-100",
-      iconColor: "text-yellow-400",
+      bgGradient: "from-amber-50 to-amber-100",
+      borderColor: "border-amber-200",
+      textColor: "text-amber-600",
+      accentColor: "text-amber-900",
+      iconColor: "text-amber-500",
     },
     {
       icon: Trash2,
       label: "Expired",
       value: stats.expired_items,
-      bgGradient: "from-red-500/20 to-red-600/10",
-      borderColor: "border-red-400/30",
-      textColor: "text-red-300",
-      accentColor: "text-red-100",
-      iconColor: "text-red-400",
+      bgGradient: "from-red-50 to-red-100",
+      borderColor: "border-red-200",
+      textColor: "text-red-600",
+      accentColor: "text-red-900",
+      iconColor: "text-red-500",
     },
   ]
 
@@ -83,7 +83,7 @@ export function StatsCard() {
       {statItems.map((stat, idx) => {
         const Icon = stat.icon
         return (
-          <Card key={idx} className={`p-6 bg-gradient-to-br ${stat.bgGradient} border-2 ${stat.borderColor} shadow-md hover:shadow-lg transition-all backdrop-blur-sm`}>
+          <Card key={idx} className={`p-6 bg-gradient-to-br ${stat.bgGradient} border-2 ${stat.borderColor} shadow-sm hover:shadow-md transition-shadow`}>
             <div className="flex items-center justify-between mb-3">
               <Icon className={`w-6 h-6 ${stat.iconColor}`} />
               <span className={`text-sm font-semibold ${stat.textColor}`}>{stat.label}</span>
