@@ -54,7 +54,7 @@ export async function updateItem(itemId: number, userId: number, updates: Partia
 
   const result = await sql`
     UPDATE items 
-    SET ${sql(setClauses)}, updated_at = CURRENT_TIMESTAMP
+    SET ${sql.unsafe(setClauses)}, updated_at = CURRENT_TIMESTAMP
     WHERE id = ${itemId} AND user_id = ${userId}
     RETURNING *
   `

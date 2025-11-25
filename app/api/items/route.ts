@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 })
     }
 
-    const items = await getItemsByUserId(payload.userId)
+    const items = await getItemsByUserId(payload.userId as number)
     return NextResponse.json(items)
   } catch (error) {
     console.error("Error fetching items:", error)
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     const { name, category, purchaseDate, expiryDate, location, quantity, unit, notes } = await request.json()
 
     const item = await createItem(
-      payload.userId,
+      payload.userId as number,
       name,
       category,
       purchaseDate,
@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
 
     // Send confirmation email
     try {
-      const user = await getUserById(payload.userId)
+      const user = await getUserById(payload.userId as number)
       if (user) {
         await sendItemCreatedEmail({
           to: user.email,

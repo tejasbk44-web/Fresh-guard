@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Invalid token" }, { status: 401 })
     }
 
-    const notifications = await getNotificationsByUserId(payload.userId)
-    const unreadCount = await getUnreadCount(payload.userId)
+    const notifications = await getNotificationsByUserId(payload.userId as number)
+    const unreadCount = await getUnreadCount(payload.userId as number)
 
     return NextResponse.json({ notifications, unreadCount })
   } catch (error) {

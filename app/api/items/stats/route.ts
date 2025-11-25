@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
         SUM(CASE WHEN expiry_date <= NOW() + INTERVAL '3 days' AND expiry_date > NOW() THEN 1 ELSE 0 END) as expiring_soon,
         SUM(CASE WHEN expiry_date <= NOW() THEN 1 ELSE 0 END) as expired_items
       FROM items
-      WHERE user_id = ${payload.userId}
+      WHERE user_id = ${payload.userId as number}
     `
 
     return NextResponse.json(result[0])

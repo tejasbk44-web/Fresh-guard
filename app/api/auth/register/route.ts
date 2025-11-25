@@ -18,19 +18,27 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Password must be at least 8 characters" }, { status: 400 })
     }
 
+    // Normalize email to lowercase
+    const normalizedEmail = email.toLowerCase().trim()
+
     // Check if user exists
-    const existingUser = await getUserByEmail(email)
+    const existingUser = await getUserByEmail(normalizedEmail)
     if (existingUser) {
       return NextResponse.json({ error: "Email already registered" }, { status: 400 })
     }
 
     // Hash password and create user
     const passwordHash = await hashPassword(password)
-    const user = await createUser(email, name, passwordHash)
+    const user = await createUser(normalizedEmail, name, passwordHash)
 
+    if (!user) {
+      return NextResponse.json({ error: "Failed to create user" }, { status: 500 })
+    }
+
+    console.log(`[Register] New user created: ${normalizedEmail}`)
     return NextResponse.json({ message: "User created successfully", user }, { status: 201 })
   } catch (error) {
-    console.error("Registration error:", error)
+    console.error("[Register] Error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

@@ -2,23 +2,14 @@
 
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
-import { ItemList } from "./item-list"
+import { ItemList, type Item } from "./item-list"
 import { AddItemModal } from "./add-item-modal"
 import { NotificationsPanel } from "./notifications-panel"
 import { StatsCard } from "./stats-card"
 import { useRouter } from "next/navigation"
 import { Plus, LogOut } from "lucide-react"
 
-interface Item {
-  id: number
-  name: string
-  category: string
-  expiry_date: string
-  location: string
-  quantity: number
-  unit: string
-  status: string
-}
+// Item type is imported from "./item-list"
 
 export function DashboardClient({ userId }: { userId: number }) {
   const [items, setItems] = useState<Item[]>([])

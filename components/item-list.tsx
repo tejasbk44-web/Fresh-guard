@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { format, differenceInDays } from "date-fns"
 import { Trash2, MapPin, Package, Calendar } from "lucide-react"
 
-interface Item {
+export interface Item {
   id: number
   name: string
   category: string

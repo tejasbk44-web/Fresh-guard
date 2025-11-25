@@ -12,14 +12,22 @@ export async function POST(request: NextRequest) {
 
     const user = await getUserByEmail(email)
     if (!user) {
+      console.log(`[Login] User not found: ${email}`)
+      return NextResponse.json({ error: "Invalid email or password" }, { status: 401 })
+    }
+
+    if (!user.password_hash) {
+      console.log(`[Login] User has no password hash: ${email}`)
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 })
     }
 
     const passwordValid = await verifyPassword(password, user.password_hash)
     if (!passwordValid) {
+      console.log(`[Login] Invalid password for user: ${email}`)
       return NextResponse.json({ error: "Invalid email or password" }, { status: 401 })
     }
 
+    console.log(`[Login] Successful login for user: ${email}`)
     const token = await jwtSign({ userId: user.id, email: user.email })
 
     const response = NextResponse.json(
@@ -37,7 +45,7 @@ export async function POST(request: NextRequest) {
 
     return response
   } catch (error) {
-    console.error("[v0] Login error:", error)
+    console.error("[Login] Error:", error)
     return NextResponse.json({ error: "Internal server error" }, { status: 500 })
   }
 }

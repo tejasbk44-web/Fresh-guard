@@ -22,5 +22,5 @@ export default async function DashboardPage() {
     redirect("/login")
   }
 
-  return <DashboardClient userId={payload.userId} />
+  return <DashboardClient userId={payload.userId as number} />
 }
