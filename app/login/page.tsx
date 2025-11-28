@@ -3,7 +3,7 @@ import { LoginForm } from "@/components/login-form"
 
 export const metadata = {
   title: "Login - FreshGuard",
-  description: "Log in to your FreshGuard account",
+  description: "Log in to your FreshGuard account Now!!",
 }
 
 export default function LoginPage() {
