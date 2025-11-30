@@ -6,6 +6,7 @@ import { ItemList, type Item } from "./item-list"
 import { AddItemModal } from "./add-item-modal"
 import { NotificationsPanel } from "./notifications-panel"
 import { StatsCard } from "./stats-card"
+import { RecipeSuggestions } from "./recipe-suggestions"
 import { useRouter } from "next/navigation"
 import { Plus, LogOut } from "lucide-react"
 
@@ -109,6 +110,11 @@ export function DashboardClient({ userId }: { userId: number }) {
         ) : (
           <ItemList items={items} onItemDeleted={fetchItems} />
         )}
+
+        {/* Recipe Suggestions Section */}
+        <div className="mt-16">
+          <RecipeSuggestions />
+        </div>
       </main>
     </div>
   )
