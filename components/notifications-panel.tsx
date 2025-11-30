@@ -58,11 +58,22 @@ export function NotificationsPanel() {
   function getNotificationColor(type: string) {
     switch (type) {
       case "expired":
-        return "bg-red-50 border-red-200"
+        return "bg-red-50 border-red-200 border-l-4 border-l-red-500"
       case "expiry_warning":
-        return "bg-yellow-50 border-yellow-200"
+        return "bg-amber-50 border-amber-200 border-l-4 border-l-amber-500"
       default:
-        return "bg-blue-50 border-blue-200"
+        return "bg-blue-50 border-blue-200 border-l-4 border-l-blue-500"
+    }
+  }
+
+  function getNotificationIcon(type: string) {
+    switch (type) {
+      case "expired":
+        return "❌"
+      case "expiry_warning":
+        return "⏰"
+      default:
+        return "ℹ️"
     }
   }
 
@@ -88,20 +99,27 @@ export function NotificationsPanel() {
               <div className="p-4 text-center text-gray-500">No notifications</div>
             ) : (
               notifications.map((notif) => (
-                <div key={notif.id} className={`p-4 border-b ${getNotificationColor(notif.type)}`}>
+                <div key={notif.id} className={`p-4 border-b ${getNotificationColor(notif.type)} transition-all hover:shadow-sm`}>
                   <div className="flex justify-between items-start gap-2 mb-1">
-                    <h4 className="font-medium text-gray-900 flex-1">{notif.title}</h4>
-                    <button onClick={() => deleteNotification(notif.id)} className="text-gray-400 hover:text-gray-600">
+                    <div className="flex items-start gap-2 flex-1">
+                      <span className="text-lg mt-0.5">{getNotificationIcon(notif.type)}</span>
+                      <h4 className={`font-semibold text-sm ${!notif.is_read ? "text-gray-900" : "text-gray-700"}`}>
+                        {notif.title}
+                      </h4>
+                    </div>
+                    <button onClick={() => deleteNotification(notif.id)} className="text-gray-400 hover:text-gray-600 flex-shrink-0">
                       ✕
                     </button>
                   </div>
-                  <p className="text-sm text-gray-600 mb-2">{notif.message}</p>
-                  <p className="text-xs text-gray-500 mb-2">{format(new Date(notif.created_at), "MMM d, h:mm a")}</p>
-                  {!notif.is_read && (
-                    <Button onClick={() => markAsRead(notif.id)} size="sm" variant="outline" className="w-full text-xs">
-                      Mark as Read
-                    </Button>
-                  )}
+                  <p className="text-sm text-gray-700 mb-2 ml-6">{notif.message}</p>
+                  <div className="flex justify-between items-center ml-6">
+                    <p className="text-xs text-gray-500">{format(new Date(notif.created_at), "MMM d, h:mm a")}</p>
+                    {!notif.is_read && (
+                      <Button onClick={() => markAsRead(notif.id)} size="sm" variant="outline" className="text-xs px-2 py-1 h-6">
+                        Mark Read
+                      </Button>
+                    )}
+                  </div>
                 </div>
               ))
             )}

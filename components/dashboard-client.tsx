@@ -20,7 +20,16 @@ export function DashboardClient({ userId }: { userId: number }) {
 
   useEffect(() => {
     fetchItems()
+    checkExpiryNotifications()
   }, [])
+
+  async function checkExpiryNotifications() {
+    try {
+      await fetch("/api/notifications/check-expiry", { method: "POST" })
+    } catch (error) {
+      console.error("Error checking expiry notifications:", error)
+    }
+  }
 
   async function fetchItems() {
     try {
