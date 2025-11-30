@@ -2,6 +2,8 @@ import { type NextRequest, NextResponse } from "next/server"
 import { verifyJwt } from "@/lib/jwt"
 import { sql } from "@/lib/db"
 import { createNotification } from "@/lib/notifications"
+import { sendExpiryReminder } from "@/lib/email"
+import { getUserById } from "@/lib/auth"
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,6 +32,7 @@ export async function POST(request: NextRequest) {
 
     let notificationsCreated = 0
     const notificationMessages: string[] = []
+    const user = await getUserById(userId)
 
     for (const item of expiringItems) {
       const daysUntilExpiry = Math.ceil(
@@ -56,6 +59,23 @@ export async function POST(request: NextRequest) {
         )
         notificationsCreated++
         notificationMessages.push(`${item.name} (${daysUntilExpiry} days)`)
+
+        // Send email notification
+        try {
+          if (user) {
+            await sendExpiryReminder({
+              to: user.email,
+              subject: `⏰ ${item.name} expires in ${daysUntilExpiry} day${daysUntilExpiry === 1 ? "" : "s"}!`,
+              itemName: item.name,
+              expiryDate: item.expiry_date,
+              daysRemaining: daysUntilExpiry,
+            })
+            console.log(`Expiry email sent for ${item.name} to ${user.email}`)
+          }
+        } catch (emailError) {
+          console.error(`Failed to send expiry email for item ${item.id}:`, emailError)
+          // Continue processing other items even if email fails
+        }
       }
     }
 

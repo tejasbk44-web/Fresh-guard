@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server"
 import { verifyJwt } from "@/lib/jwt"
 import { getItemsByUserId, createItem } from "@/lib/items"
 import { getUserById } from "@/lib/auth"
-import { sendItemCreatedEmail } from "@/lib/email"
+import { sendItemCreatedEmail, sendExpiryReminder } from "@/lib/email"
 import { format } from "date-fns"
 
 export async function GET(request: NextRequest) {
@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
     try {
       const user = await getUserById(payload.userId as number)
       if (user) {
+        // Send item created email
         await sendItemCreatedEmail({
           to: user.email,
           userName: user.name,
@@ -66,9 +67,26 @@ export async function POST(request: NextRequest) {
           purchaseDate,
           expiryDate,
         })
+
+        // Calculate days until expiry
+        const expiryTime = new Date(expiryDate).getTime()
+        const nowTime = new Date().getTime()
+        const daysUntilExpiry = Math.ceil((expiryTime - nowTime) / (1000 * 60 * 60 * 24))
+
+        // Send expiry reminder if item expires within 3 days
+        if (daysUntilExpiry <= 3 && daysUntilExpiry > 0) {
+          await sendExpiryReminder({
+            to: user.email,
+            subject: `⏰ ${name} expires in ${daysUntilExpiry} day${daysUntilExpiry === 1 ? "" : "s"}!`,
+            itemName: name,
+            expiryDate: expiryDate,
+            daysRemaining: daysUntilExpiry,
+          })
+          console.log(`Expiry reminder sent for item: ${name} (${daysUntilExpiry} days remaining)`)
+        }
       }
     } catch (emailError) {
-      console.error("Failed to send item creation email:", emailError)
+      console.error("Failed to send email:", emailError)
       // Don't fail the request if email fails
     }
 
